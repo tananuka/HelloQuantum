@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{17bf6ba3-9b78-f1f2-d52f-9ed1a90e7dd1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonRealtime", "PhotonRealtime.csproj", "{46063ded-7498-e597-4abc-1b34bac31ff7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{5dc1777a-8f0c-4169-e68f-20ce74963ecd}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{17bf6ba3-9b78-f1f2-d52f-9ed1a90e7dd1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17bf6ba3-9b78-f1f2-d52f-9ed1a90e7dd1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46063ded-7498-e597-4abc-1b34bac31ff7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46063ded-7498-e597-4abc-1b34bac31ff7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5dc1777a-8f0c-4169-e68f-20ce74963ecd}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5dc1777a-8f0c-4169-e68f-20ce74963ecd}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
