@@ -1,5 +1,5 @@
 ﻿using UnityEditor;
-using UnityEditor.Experimental.SceneManagement;
+
 using System.Reflection;
 using Quantum;
 using UnityEngine;
@@ -24,7 +24,7 @@ public class EntityViewEditor : Editor {
     CustomEditorsHelper.DrawScript(target);
 
     if (!EditorApplication.isPlaying) {
-      bool isOnScene = target.gameObject.scene.IsValid() && PrefabStageUtility.GetPrefabStage(target.gameObject) == null;
+      bool isOnScene = target.gameObject.scene.IsValid() && UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(target.gameObject) == null;
 
       if (isOnScene) {
         bool hasPrototype = target.gameObject.GetComponent<EntityPrototype>();

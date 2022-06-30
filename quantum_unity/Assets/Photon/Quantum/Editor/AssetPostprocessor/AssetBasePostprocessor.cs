@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Experimental.SceneManagement;
+
 using UnityEngine;
 
 namespace Quantum.Editor {
@@ -21,11 +21,11 @@ namespace Quantum.Editor {
 
     [InitializeOnLoadMethod]
     static void SetupVariantPrefabWorkarounds() {
-      PrefabStage.prefabSaving += OnPrefabStageSaving;
-      PrefabStage.prefabStageClosing += OnPrefabStageClosing;
+      UnityEditor.SceneManagement.PrefabStage.prefabSaving += OnPrefabStageSaving;
+      UnityEditor.SceneManagement.PrefabStage.prefabStageClosing += OnPrefabStageClosing;
     }
 
-    static void OnPrefabStageClosing(PrefabStage stage) {
+    static void OnPrefabStageClosing(UnityEditor.SceneManagement.PrefabStage stage) {
 
       var assetPath = stage.GetAssetPath();
       var prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
@@ -37,7 +37,7 @@ namespace Quantum.Editor {
     }
 
     static void OnPrefabStageSaving(GameObject obj) {
-      var stage = PrefabStageUtility.GetCurrentPrefabStage();
+      var stage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
       if (stage == null)
         return;
 
@@ -125,7 +125,7 @@ namespace Quantum.Editor {
             if (!ignoreVariantPrefabWorkaround) {
               // there is some weirdness in how Unity handles variant prefabs; basically you can't reference any components
               // externally in that stage, or you'll get an internal error
-              if (PrefabUtility.GetPrefabAssetType(prefab) == PrefabAssetType.Variant && PrefabStageUtility.GetCurrentPrefabStage()?.GetAssetPath() == path) {
+              if (PrefabUtility.GetPrefabAssetType(prefab) == PrefabAssetType.Variant && UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage()?.GetAssetPath() == path) {
                 break;
               }
             }
@@ -250,7 +250,7 @@ namespace Quantum.Editor {
   }
 
   static class PrefabStageExtensions {
-    public static string GetAssetPath(this PrefabStage stage) {
+    public static string GetAssetPath(this UnityEditor.SceneManagement.PrefabStage stage) {
 #if UNITY_2020_1_OR_NEWER
       return stage.assetPath;
 #else
