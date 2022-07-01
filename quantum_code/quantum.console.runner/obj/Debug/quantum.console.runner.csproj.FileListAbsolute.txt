@@ -1,0 +1,16 @@
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/quantum.console.runner.exe.config
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/quantum.console.runner.exe
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/quantum.console.runner.pdb
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/Newtonsoft.Json.dll
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/PhotonDeterministic.dll
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/quantum.code.dll
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/quantum.core.dll
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/Newtonsoft.Json.xml
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/PhotonDeterministic.pdb
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/quantum.core.pdb
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/bin/Debug/quantum.code.pdb
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/obj/Debug/quantum.console.runner.csprojAssemblyReference.cache
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/obj/Debug/quantum.console.runner.csproj.CoreCompileInputs.cache
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/obj/Debug/quantum.console.runner.csproj.CopyComplete
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/obj/Debug/quantum.console.runner.exe
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.console.runner/obj/Debug/quantum.console.runner.pdb

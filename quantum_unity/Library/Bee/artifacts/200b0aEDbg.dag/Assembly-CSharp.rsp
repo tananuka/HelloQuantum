@@ -368,6 +368,7 @@
 "Assets/Photon/Quantum/Generated/AssetTypes/EntityComponentPhysicsCallbacks3D.cs"
 "Assets/Photon/Quantum/Generated/AssetTypes/EntityComponentPhysicsCollider2D.cs"
 "Assets/Photon/Quantum/Generated/AssetTypes/EntityComponentPhysicsCollider3D.cs"
+"Assets/Photon/Quantum/Generated/AssetTypes/EntityComponentPlayerLink.cs"
 "Assets/Photon/Quantum/Generated/AssetTypes/EntityComponentTransform2D.cs"
 "Assets/Photon/Quantum/Generated/AssetTypes/EntityComponentTransform2DVertical.cs"
 "Assets/Photon/Quantum/Generated/AssetTypes/EntityComponentTransform3D.cs"

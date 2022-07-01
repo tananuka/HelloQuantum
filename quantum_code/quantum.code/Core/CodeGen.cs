@@ -25,6 +25,7 @@ namespace Quantum {
   
   [System.FlagsAttribute()]
   public enum InputButtons : int {
+    Jump = 1 << 0,
   }
   public static unsafe partial class InputButtons_ext {
     public static Boolean HasFlag(this InputButtons self, InputButtons flag) {
@@ -333,14 +334,18 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Input {
-    public const Int32 SIZE = 4;
-    public const Int32 ALIGNMENT = 4;
+    public const Int32 SIZE = 32;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(16)]
+    public FPVector2 Direction;
     [FieldOffset(0)]
-    private fixed Byte _alignment_padding_[4];
+    public Button Jump;
     public const int MAX_COUNT = 6;
     public override Int32 GetHashCode() {
       unchecked { 
         var hash = 61;
+        hash = hash * 31 + Direction.GetHashCode();
+        hash = hash * 31 + Jump.GetHashCode();
         return hash;
       }
     }
@@ -354,42 +359,46 @@ namespace Quantum {
     }
     public Boolean IsDown(InputButtons button) {
       switch (button) {
+        case InputButtons.Jump: return Jump.IsDown;
       }
       return false;
     }
     public Boolean WasPressed(InputButtons button) {
       switch (button) {
+        case InputButtons.Jump: return Jump.WasPressed;
       }
       return false;
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (Input*)ptr;
+        Button.Serialize(&p->Jump, serializer);
+        FPVector2.Serialize(&p->Direction, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct _globals_ {
-    public const Int32 SIZE = 352;
+    public const Int32 SIZE = 520;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(32)]
+    [FieldOffset(8)]
     public FP DeltaTime;
-    [FieldOffset(64)]
-    public FrameMetaData FrameMetaData;
-    [FieldOffset(24)]
-    public AssetRefMap Map;
     [FieldOffset(40)]
-    public NavMeshRegionMask NavMeshRegions;
-    [FieldOffset(120)]
-    public PhysicsSceneSettings PhysicsSettings;
-    [FieldOffset(48)]
-    public RNGSession RngSession;
-    [FieldOffset(88)]
-    public BitSet256 Systems;
+    public FrameMetaData FrameMetaData;
     [FieldOffset(0)]
+    public AssetRefMap Map;
+    [FieldOffset(16)]
+    public NavMeshRegionMask NavMeshRegions;
+    [FieldOffset(288)]
+    public PhysicsSceneSettings PhysicsSettings;
+    [FieldOffset(24)]
+    public RNGSession RngSession;
+    [FieldOffset(64)]
+    public BitSet256 Systems;
+    [FieldOffset(96)]
     [FramePrinter.FixedArrayAttribute(typeof(Input), 6)]
-    private fixed Byte _input_[24];
+    private fixed Byte _input_[192];
     public FixedArray<Input> input {
       get {
-        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 4, 6); }
+        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 32, 6); }
       }
     }
     public override Int32 GetHashCode() {
@@ -408,14 +417,32 @@ namespace Quantum {
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (_globals_*)ptr;
-        FixedArray<Input>.Serialize(p->input, serializer, Quantum.Input.Serialize);
         AssetRefMap.Serialize(&p->Map, serializer);
         FP.Serialize(&p->DeltaTime, serializer);
         NavMeshRegionMask.Serialize(&p->NavMeshRegions, serializer);
         RNGSession.Serialize(&p->RngSession, serializer);
         FrameMetaData.Serialize(&p->FrameMetaData, serializer);
         Quantum.BitSet256.Serialize(&p->Systems, serializer);
+        FixedArray<Input>.Serialize(p->input, serializer, Quantum.Input.Serialize);
         PhysicsSceneSettings.Serialize(&p->PhysicsSettings, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct PlayerLink : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public PlayerRef Player;
+    public override Int32 GetHashCode() {
+      unchecked { 
+        var hash = 71;
+        hash = hash * 31 + Player.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (PlayerLink*)ptr;
+        PlayerRef.Serialize(&p->Player, serializer);
     }
   }
   public unsafe partial class Frame {
@@ -430,6 +457,7 @@ namespace Quantum {
     }
     partial void InitGen() {
       ComponentTypeId.Setup(() => {
+        ComponentTypeId.Add<Quantum.PlayerLink>(new ComponentCallbacks(Quantum.PlayerLink.Serialize));
       });
       Initialize(this, this.SimulationConfig.Entities);
       _ComponentSignalsOnAdded = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
@@ -456,6 +484,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<PhysicsCollider2D>();
       BuildSignalsArrayOnComponentAdded<PhysicsCollider3D>();
       BuildSignalsArrayOnComponentRemoved<PhysicsCollider3D>();
+      BuildSignalsArrayOnComponentAdded<Quantum.PlayerLink>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.PlayerLink>();
       BuildSignalsArrayOnComponentAdded<Transform2D>();
       BuildSignalsArrayOnComponentRemoved<Transform2D>();
       BuildSignalsArrayOnComponentAdded<Transform2DVertical>();
@@ -468,6 +498,8 @@ namespace Quantum {
     public void SetPlayerInput(Int32 player, Input input) {
       if ((uint)player >= (uint)_globals->input.Length) { throw new System.ArgumentOutOfRangeException("player"); }
       var i = _globals->input.GetPointer(player);
+      i->Jump = i->Jump.Update(this.Number, input.Jump);
+      i->Direction = input.Direction;
     }
     public Input* GetPlayerInput(Int32 player) {
       if ((uint)player >= (uint)_globals->input.Length) { throw new System.ArgumentOutOfRangeException("player"); }
@@ -497,6 +529,9 @@ namespace Quantum {
   }
   #endregion
   public unsafe partial class ComponentPrototypeVisitor : Prototypes.ComponentPrototypeVisitorBase {
+    public virtual void Visit(Prototypes.PlayerLink_Prototype prototype) {
+      VisitFallback(prototype);
+    }
   }
   public static unsafe partial class Constants {
   }
@@ -553,6 +588,7 @@ namespace Quantum {
       Register(typeof(PhysicsCollider2D), PhysicsCollider2D.SIZE);
       Register(typeof(PhysicsCollider3D), PhysicsCollider3D.SIZE);
       Register(typeof(PhysicsSceneSettings), PhysicsSceneSettings.SIZE);
+      Register(typeof(Quantum.PlayerLink), Quantum.PlayerLink.SIZE);
       Register(typeof(PlayerRef), PlayerRef.SIZE);
       Register(typeof(Ptr), Ptr.SIZE);
       Register(typeof(QBoolean), QBoolean.SIZE);
@@ -593,17 +629,50 @@ namespace Quantum.Prototypes {
   }
   [System.SerializableAttribute()]
   public unsafe sealed partial class Input_Prototype : IPrototype {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
+    public Button Jump;
+    public FPVector2 Direction;
     partial void MaterializeUser(Frame frame, ref Input result, in PrototypeMaterializationContext context);
     public void Materialize(Frame frame, ref Input result, in PrototypeMaterializationContext context) {
+      result.Direction = this.Direction;
+      result.Jump = this.Jump;
       MaterializeUser(frame, ref result, in context);
     }
   }
+  [System.SerializableAttribute()]
+  [ComponentPrototypeAttribute(typeof(PlayerLink))]
+  public unsafe sealed partial class PlayerLink_Prototype : ComponentPrototype<PlayerLink> {
+    public PlayerRef Player;
+    partial void MaterializeUser(Frame frame, ref PlayerLink result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+      PlayerLink component = default;
+      Materialize((Frame)f, ref component, in context);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public override Boolean SetEntityRefs(FrameBase f, EntityRef entity, MapEntityLookup mapEntities) {
+      PlayerLink component = f.Get<PlayerLink>(entity);
+      SetEntityRefs((Frame)f, ref component, mapEntities);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref PlayerLink result, in PrototypeMaterializationContext context) {
+      result.Player = this.Player;
+      MaterializeUser(frame, ref result, in context);
+    }
+    public void SetEntityRefs(Frame frame, ref PlayerLink result, MapEntityLookup mapEntities) {
+    }
+    public override void Dispatch(ComponentPrototypeVisitorBase visitor) {
+      ((ComponentPrototypeVisitor)visitor).Visit(this);
+    }
+  }
   public unsafe partial class FlatEntityPrototypeContainer {
+    [FixedArray(0, 1)]
+    public List<Prototypes.PlayerLink_Prototype> PlayerLink;
     partial void CollectGen(List<ComponentPrototype> target) {
+      Collect(PlayerLink, target);
     }
     public unsafe partial class StoreVisitor {
+      public override void Visit(Prototypes.PlayerLink_Prototype prototype) {
+        Storage.Store(prototype, ref Storage.PlayerLink);
+      }
     }
   }
 }

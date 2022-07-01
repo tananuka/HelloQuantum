@@ -9,14 +9,15 @@ namespace Quantum {
     public static SystemBase[] CreateSystems(RuntimeConfig gameConfig, SimulationConfig simulationConfig) {
       return new SystemBase[] {
         // pre-defined core systems
-        new Core.CullingSystem2D(), 
+        //new Core.CullingSystem2D(), 
         new Core.CullingSystem3D(),
         
-        new Core.PhysicsSystem2D(),
+        //new Core.PhysicsSystem2D(),
         new Core.PhysicsSystem3D(),
         
         new Core.NavigationSystem(),
         new Core.EntityPrototypeSystem(),
+        new MovementSystem()
 
         // user systems go here
       };

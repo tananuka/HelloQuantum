@@ -1,0 +1,7 @@
+/Users/bambini/git/HelloQuantum/quantum_unity/Assets/Photon/Quantum/Assemblies/quantum.code.dll
+/Users/bambini/git/HelloQuantum/quantum_unity/Assets/Photon/Quantum/Assemblies/quantum.code.pdb
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.code/obj/Debug/quantum.code.csprojAssemblyReference.cache
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.code/obj/Debug/quantum.code.csproj.CoreCompileInputs.cache
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.code/obj/Debug/quantum.code.csproj.CopyComplete
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.code/obj/Debug/quantum.code.dll
+/Users/bambini/git/HelloQuantum/quantum_code/quantum.code/obj/Debug/quantum.code.pdb

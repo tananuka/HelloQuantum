@@ -212,6 +212,7 @@
      <Compile Include="Assets/Photon/QuantumDemo/Menu/Scripts/UIGame.cs" />
      <Compile Include="Assets/Photon/Quantum/Scripts/QuantumNetworkCommunicator.cs" />
      <Compile Include="Assets/Photon/Quantum/Scripts/AssetLinking/UnityAssetLoading.cs" />
+     <Compile Include="Assets/Photon/Quantum/Generated/AssetTypes/EntityComponentPlayerLink.cs" />
      <None Include="Assets/Photon/PhotonLibs/netstandard2.0/Photon3Unity3D.xml" />
      <None Include="Assets/Photon/license.txt" />
      <None Include="Assets/Resources/BillingMode.json" />
